@@ -114,18 +114,23 @@ a.min()
 a.max()
 
 # sum, min, max on specific axis
-b = np.arange(12).reshape(2, 2, 3)
+b = np.arange(12).reshape(3, 4)
 b
 b.sum(axis = 1)
+b.sum(axis = 0)
+
+b.cumsum(axis = 1)
 
 
+# UNIVERSAL FUNCTIONS
+B = np.arange(3)
+B
+np.exp(B)
+np.sqrt(B)
+np.sin(B)
 
-
-
-
-
-
-
+C = np.array([0, 1, 1.4142])
+np.add(B, C)
 
 
 
