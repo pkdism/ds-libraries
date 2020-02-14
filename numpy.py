@@ -1,6 +1,6 @@
 import numpy as np
 
-
+# -----------------------------------------------------------------------------
 # AN EXAMPLE
 a = np.arange(15).reshape(3,5)
 a
@@ -16,6 +16,8 @@ b
 type(b)
 
 
+
+# -----------------------------------------------------------------------------
 # ARRAY CREATION
 a = np.array([2, 3, 4])
 a
@@ -61,6 +63,8 @@ x = np.linspace(0, 2*pi, 100) # useful to evaluate a lot of points
 f = np.sin(x)
 
 
+
+# -----------------------------------------------------------------------------
 # PRINTING ARRAYS
 print(np.arange(6))
 print(np.arange(12).reshape(4, 3))
@@ -70,6 +74,8 @@ print(np.arange(10000).reshape(100, 100))
 #np.set_printoptions(threshold = sys.maxsize)
 
 
+
+# -----------------------------------------------------------------------------
 # BASIC OPERATIONS
 a = np.array([20, 30, 40, 50])
 b = np.arange(4)
@@ -122,6 +128,8 @@ b.sum(axis = 0)
 b.cumsum(axis = 1)
 
 
+
+# -----------------------------------------------------------------------------
 # UNIVERSAL FUNCTIONS
 B = np.arange(3)
 B
@@ -131,6 +139,143 @@ np.sin(B)
 
 C = np.array([0, 1, 1.4142])
 np.add(B, C)
+
+# all, any, apply_along_axis, argmax, argmin, argsort, average, bincount, ceil,
+# clip, conj, corrcoef, cov, cross, cumprod, cumsum, diff, dot, floor, inner, 
+# invert, lexsort, max, maximum, mean, median, min, minimum, nonzero, outer, 
+# prod, re, round, sort, std, sum, trace, transpose, var, vdot, vectorize, where
+
+
+
+# -----------------------------------------------------------------------------
+# INDEXING, SLICING AND ITERATING
+
+# one dimensional arrays
+a = np.arange(10)**3
+a
+a[2]
+a[2:5] # a[5] is not included
+a[0:6:2] = 1000 # from 0 to 6, exclusive, set every second element to 1000
+a
+a[:6:2] = 1000
+a
+a[::-1] # reversed a
+for i in a:
+    print(i**(1/3))
+
+# multidimensional arrays
+def f(x, y):
+    return 10*x+y
+
+b = np.fromfunction(f, (5, 4), dtype = int)
+b
+b[2,3]
+b[0:5, 1]
+b[:, 1]
+b[1:3, :]
+b[-1]
+b[-1,:]
+b[-1,...]
+x = np.arange(720).reshape(6, 5, 4, 3, 2)
+x[1, 2, ...]
+x[1, 2, :, :, :]
+x[1, 2, ...] == x[1, 2, :, :, :]
+sum(x[1, 2, ...]) == sum(x[1, 2, :, :, :])
+sum(sum(x[1, 2, ...])) == sum(sum(x[1, 2, :, :, :]))
+sum(sum(sum(x[1, 2, ...]))) == sum(sum(sum(x[1, 2, :, :, :])))
+
+x[..., 1]
+x[:, :, :, :, 1]
+x[4, ..., 2, :]
+x[4, :, :, 2, :]
+
+c = np.array([[[0, 1, 2],
+               [10, 12, 13]],
+            [[100, 101, 102],
+             [110, 112, 113]]])
+c.shape
+c[1, ...]
+c[..., 2]
+c[:, :, 2]
+c[:, 1, :]
+
+for row in b:
+    print(row)
+
+for element in b.flat:
+    print(element)
+
+
+
+# -----------------------------------------------------------------------------
+# SHAPE MANIPULATION
+rg = np.random.rand
+a = np.floor(10*rg(3, 4))
+a.shape
+a.ravel()
+a.reshape(6, 2) # reshape will return a reshaped array, w/o modifying the array itself
+a.T
+a.T.shape
+a.shape
+a
+a.resize((2, 6)) # resize modifies the array itself
+a
+a.reshape(3, -1) # if a dimension is given as -1, other dimensions are calculated automatically
+
+
+
+# -----------------------------------------------------------------------------
+# STACKING TOGETHER DIFFERENT ARRAYS
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
