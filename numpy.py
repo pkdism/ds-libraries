@@ -263,6 +263,126 @@ np.c_[np.array([[1, 2, 3]]), np.array([0]), np.array([4])]
 
 
 
+# -----------------------------------------------------------------------------
+# SPLITTING ONE ARRAY INTO SEVERAL SMALLER ONES
+
+a = np.floor(10*rg(2, 12))
+a
+np.hsplit(a, 3)
+np.hsplit(a, (3, 4))
+
+
+
+# -----------------------------------------------------------------------------
+# COPIES AND VIEWS
+
+# 1. No copy at all
+a = np.arange(12)
+b = a # no new object is created
+b is a # same ndarray object has 2 names
+b.shape = 3,4 # a is reshaped
+a.shape
+
+
+# Python passes mutable object as references
+def f(x):
+    print(id(x))
+
+id(a)
+f(a)
+
+
+# 2. View or shallow copy
+# Different array objects can share the same data. 
+# The view method creates a new array that looks at the same data.
+c = a.view()
+c is a
+c.base is a # c is the view of data owned by a
+c.flags.owndata
+c.shape = 2, 6
+a.shape
+c[0, 4] = 1234 # a's data changes
+a
+
+
+# Slicing an array returns a view of it.
+s = a[:, 1:3]
+s[:] = 10 # s[:] is a view of s
+a
+
+
+# 3. Deep copy
+# The copy method makes a complete copy of the array and its data
+d = a.copy()
+d is a
+d.base is a
+d[0, 0] = 999
+a
+
+a = np.arange(int(1e8))
+b = a[:100].copy()
+del a # the memory of 'a' can be released
+
+
+
+# -----------------------------------------------------------------------------
+# FANCY INDEXING AND INDEX TRICKS
+
+# Indexing with arrays of indices
+a = np.arange(12) ** 2
+i = np.array([1, 1, 3, 8, 5]) # an array of indices
+a[i]
+
+j = np.array([[3, 4], [9, 7]]) # a bi-dimensional array of indices
+a[j]
+
+
+# When the indexed array a is multidimensional, 
+# a single array of indices refers to the first dimension of a. 
+# The following example shows this behavior by converting an image of labels 
+# into a color image using a palette.
+
+palette = np.array([[  0,   0,   0],  # black
+                    [255,   0,   0],  # red
+                    [  0, 255,   0],  # green
+                    [  0,   0, 255],  # blue
+                    [255, 255, 255]]) # white
+
+
+image = np.array([ [0, 1, 2, 0],
+                   [0, 3, 4, 0] ])
+
+palette[image] # the 2, 3, 4 color image
+
+
+
+
+# We can also give indices for multiple dimensions
+a = np.arange(12).reshape(3, 4)
+a
+i = np.array([ [0, 1], # indices for first dimension
+               [1, 2] ])
+j = np.array([ [0, 1], # indices for second dimension
+               [1, 2] ])
+a[i, j]
+j = np.array([ [2, 1],
+               [3, 3] ])
+a[i, j]
+a[i, 2]
+a[:, j]
+
+l = (i, j)
+a[l] # equivalent to a[i, j]
+
+
+s = np.array([i, j])
+a[s] # not what we want
+a[tuple(s)] # same as a[i, j]
+
+
+
+
+
 
 
 
