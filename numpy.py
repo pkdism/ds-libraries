@@ -227,32 +227,39 @@ a.reshape(3, -1) # if a dimension is given as -1, other dimensions are calculate
 # -----------------------------------------------------------------------------
 # STACKING TOGETHER DIFFERENT ARRAYS
 
+a = np.floor(10*rg(2, 2))
+a
+b = np.floor(10*rg(2, 2))
+b
+np.vstack((a, b))
+np.hstack((a, b))
+
+from numpy import newaxis
+np.column_stack((a, b))
+np.hstack((a, b))
+
+a = np.array((4, 2))
+b = np.array((3, 8))
+np.column_stack((a, b))
+np.hstack((a, b))
+
+a[:, newaxis] # 2-d columns vector
+
+a[:, newaxis][0][0]
+a[:, newaxis][1][0]
+
+np.column_stack((a, b))
+np.column_stack((a[:, newaxis], b[:, newaxis]))
+np.hstack((a[:, newaxis], b[:, newaxis]))
 
 
+np.column_stack is np.hstack
+np.row_stack is np.vstack
 
+np.r_[1:4, 0, 4]
+np.c_[1:4]
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+np.c_[np.array([[1, 2, 3]]), np.array([0]), np.array([4])]
 
 
 
