@@ -380,26 +380,68 @@ a[s] # not what we want
 a[tuple(s)] # same as a[i, j]
 
 
+time = np.linspace(20, 145, 5) # time scale
+data = np.sin(np.arange(20).reshape(5, 4)) # 4 time-dependent series
+
+# index of maxima of each series
+ind = data.argmax(axis = 0)
+ind
+
+# time corresponding to the maxima
+time_max = time[ind]
+
+data_max = data[ind, range(data.shape[1])] # => data[ind[0], 0], data[ind[1], 1], ...
+
+time_max
+data_max
+
+np.all(data_max == data.max(axis = 0))
+
+# you can also use indexing with arrays as a target to assign to
+a = np.arange(5)
+a
+
+a[[1, 3, 4]] = 0
+a
+
+# when the list of indices contains repetitions, the assignment is done several times, leaving behind the last value
+a = np.arange(5)
+a[[0, 0, 2]] = [1, 2, 3]
+a
+
+# += -> even if 0 occurs twice, the 0th element in only incremented once
+a = np.arange(5)
+a
+a[[0, 0, 2]] += 1 # this is same as a[[0, 0, 2]] = a[[0, 0, 2]] + 1
 
 
 
+# -----------------------------------------------------------------------------
+# INDEXING WITH BOOLEAN ARRAYS
 
+a = np.arange(12).reshape(3, 4)
+a
+b = a > 4 # boolean array - same shape as a
+b
+a[b] # a 1-D array with selected elements
 
+# this can be very useful in assignment
+a[b] = 0
+a
 
+# second way of indexing with boolean arrays
+# for each dimension, give a 1-D array
+a = np.arange(12).reshape(3, 4)
+a
+b1 = np.array([False, True, True]) # first dimension selection - length of b1 should be equal to nrows of a
+b2 = np.array([True, False, True, False]) # second dimesion selection - length of b2 should be equal to ncols of a
 
+a[b1, :] # selecting rows
+a[b1] # same thing
 
+a[:, b2] # selecting columns
 
-
-
-
-
-
-
-
-
-
-
-
+a[b1, b2]
 
 
 
