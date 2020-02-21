@@ -445,6 +445,28 @@ a[b1, b2]
 
 
 
+# -----------------------------------------------------------------------------
+# ix_() function
+
+a = np.array([2, 3, 4, 5])
+b = np.array([8, 5, 4])
+c = np.array([5, 4, 6, 8, 3])
+
+ax, bx, cx = np.ix_(a, b, c)
+ax
+bx
+cx
+ax.shape
+bx.shape
+cx.shape
+
+result = ax + bx * cx
+result
+
+result[3, 2, 4]
+result[3, 2]
+
+a[3] + b[2] * c[4]
 
 
 
