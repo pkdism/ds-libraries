@@ -470,6 +470,60 @@ a[3] + b[2] * c[4]
 
 
 
+# -----------------------------------------------------------------------------
+# Linear Algebra
+
+import numpy as np
+a = np.array([[1.0, 2.0], [3.0, 4.0]])
+
+a.transpose() # transpose
+np.linalg.inv(a) # inverse
+
+u = np.eye(2) # identity
+u
+
+j = np.array([[0.0, -1.0], [1.0, 0.0]])
+
+j @ j # matrix product
+np.trace(u) # trace - sum of diagonal elements (u is identity 2 x 2)
+
+y = np.array([[5.], [7.]])
+np.linalg.solve(a, y)
+
+np.linalg.eig(j)
 
 
 
+# -----------------------------------------------------------------------------
+# TIPS AND TRICKS
+
+# Automatic reshaping
+a = np.arange(30)
+b = a.reshape((2, -1, 3)) # -1 means "whatever is needed"
+b.shape
+b
+
+# Vector stacking
+x = np.arange(0, 10, 2)
+y = np.arange(5)
+m = np.vstack((x, y))
+m
+
+xy = np.hstack([x, y])
+xy
+
+
+
+# -----------------------------------------------------------------------------
+# HISTOGRAMS
+
+import numpy as np
+rg = np.random.default_rng(1)
+
+import matplotlib.pyplot as plt
+mu, sigma = 2, 0.5
+v = rg.normal(mu, sigma, 10000)
+
+plt.hist(v, bins = 50, density = 1) # matplot lib histogram for plotting
+(n, bins) = np.histogram(v, bins = 50, density = True) # numpy histogram to get histogram values
+plt.plot(.5*(bins[1:] + bins[:-1]), n) # density plot
