@@ -331,3 +331,287 @@ plt.imshow(image_new)
 plt.gray()
 plt.title('Filtered image')
 plt.show()
+
+
+
+# -----------------------------------------------------------------------------
+# LINEAR ALGEBRA
+# scipy.linalg contains everything from numpy.linalg plus additional features
+# Unless you want to avoid adding scipy dependency, always use scipy.linalg
+
+import numpy as np
+A = np.mat('[1, 2; 3, 4]') # numpy.matrix is more convenient for matrix operations than numpy.ndarray
+A                          # despite its convenience, numpy.matrix is discouraged
+A.I
+A.T
+
+b = np.mat('[5, 6]')
+b
+b.T
+A*b.T
+
+from scipy import linalg
+A = np.array([[1, 2], [3, 4]])
+A
+linalg.inv(A)
+A.T
+
+b = np.array([[5, 6]]) # 2-D array
+b.T
+
+A*b # not matrix multiplication
+A.dot(b.T) # matrix multiplication
+
+b = np.array([5, 6]) # 1-D array
+b
+b.T # not matrix transpose
+
+A.dot(b) # does not matter for multiplication
+
+
+# Basic routines
+# Finding the inverse
+A = np.array([[1, 3, 5], [2, 5, 1], [2, 3, 8]])
+linalg.inv(A)
+
+A.dot(linalg.inv(A)) # Identity
+
+
+# Solving a linear system
+# x + 3y + 5z = 10
+# 2x + 5y + z = 8
+# 2x + 3y + 8z = 3
+
+# Ax = b
+# x = Ainv.b
+
+A = np.array([[1, 3, 5], [2, 5, 1], [2, 3, 8]])
+b = np.array([[10, 8, 3]])
+
+Ainv = linalg.inv(A)
+
+xyz1 = Ainv.dot(b.T) # slow, use linalg.solve instead
+
+A.dot(xyz1) - b.T # check
+
+
+xyz2 = linalg.solve(A, b.T)
+A.dot(xyz2) - b.T # check
+
+
+# Determinant
+detA = linalg.det(A)
+
+
+# Computing norms
+A = np.array([[1, 2], [3, 4]])
+A
+linalg.norm(A)
+linalg.norm(A, "f") # frobenius norm is the default
+linalg.norm(A, 1) # L1 norm, max column sum
+linalg.norm(A, np.inf) # L inf norm, max row sum
+linalg.norm(A, -1) # min column sum
+linalg.norm(A, -np.inf) # min row sum
+
+
+# Solving linear least squares problem and pseudo inverses
+c1, c2 = 5, 2
+i = np.r_[1:11]
+xi = 0.1*i
+yi = c1*np.exp(-xi) + c2*xi
+zi = yi + 0.05 * np.max(yi) * np.random.randn(len(yi))
+
+A = np.c_[np.exp(-xi)[:, np.newaxis], xi[:, np.newaxis]]
+c, resid, rand, sigma = linalg.lstsq(A, zi)
+
+xi2 = np.r_[0.1:1.0:100j]
+yi2 = c[0]*np.exp(-xi2) + c[1]*xi2
+
+plt.plot(xi, zi, 'x', xi2, yi2)
+plt.axis(0, 1.1, 3, 5.5)
+plt.xlabel('$x_i$')
+plt.title('Data fitting with linalg.lstsq')
+plt.show()
+
+
+# Generalized inverse
+# Let A be M x N matrix
+# A^† and A^# - Generalized inverse
+# A^H - Hermitian transpose
+# A^-1 - Inverse of matrix A
+# Case 1: M > N then A^† = (A^H x A)^-1 x A^H
+# Case 2: M < N then A^# = A^H x (A x A^H)^-1
+# Case 3: M = N then A^† = A^# = A^-1 as long as A is invertible
+
+# linalg.pinv uses linalg.lstsq to calculate generalized inverse
+# linalg.pinv2 uses singular value decomposition to calculate generalized inverse
+
+
+# DECOMPOSITION
+
+## Eigenvalues and eigenvectors
+### For some square matrix A, find vector v and scalar (lambda) ƛ such that Av = ƛv
+
+### For a N x N matrix A igenvalues are roots of the polynomial |A - ƛI| = 0
+
+### More general eigenvalue problem: Av = ƛBv
+### The generalized solution is A = BVΛV^-1
+### Λ is a diagonal matrix of eigon values
+### V is a collection of eigenvectors into columns
+
+A = np.array([[1, 5, 2], [2, 4, 1], [3, 6, 2]])
+### |A - ƛI| = -ƛ^3 + 7ƛ^2 + 8ƛ - 3
+### Roots are ƛ1 = 7.96, ƛ2 = -1.26, ƛ3 = 0.3. These are eigenvalues of A
+### Eigenvectors corresponding to each eigenvalue can be found using the equation Aƛ = ƛv
+
+la, v = linalg.eig(A)
+
+A = np.array([[1, 2], [3, 4]])
+la, v = linalg.eig(A)
+l1, l2 = la
+print(l1, l2) # eigenvalues
+print(v[:, 0]) # first eigenvector
+print(v[:, 1]) # second eigenvector
+
+print(np.sum(abs(v**2), axis = 0)) # eigenvectors are unitary
+v1 = np.array(v[:, 0]).T
+print(linalg.norm(A.dot(v1) - l1*v1)) # check the computation
+
+
+## Singular value decomposition
+
+A = np.array([[1, 2, 3], [4, 5, 6]])
+A
+M, N = A.shape
+U, s, Vh = linalg.svd(A)
+
+Sig = linalg.diagsvd(s, M, N)
+U, Vh = U, Vh
+Sig
+
+U.dot(Sig.dot(Vh)) # check computation
+# A hermitian matrix D satisfies D^H = D
+# A unitary matrix D satisfies D^HxD = I so that D^-1 = D^H
+
+
+## LU Decomposition
+
+# A = PLU where P is MxM permuation matrix (a permutation of rows of I)
+# L is in MxK lower triangular (or trapezoidal) matrix with K = min(M, N) with unit diagonal
+# and U is upper triangular or trapezoidal matrix
+
+A
+p, l, u = linalg.lu(A)
+
+
+## Cholesky decomposition
+# A = A^H and A = U^HxU or LL^H
+# L = U^H
+
+
+## QR decomposition
+# A = QR, A: MxN, Q: MxM unitary matrix, R: MxN upper trapezoidal matrix
+
+
+
+# MATRIX FUNCTIONS
+
+# Exponential and logarithm functions - expm, logm
+A_sq = np.array([[1, 2], [3, 4]])
+A_non_sq = np.array([[1, 2, 3], [4, 5, 6]])
+
+linalg.expm(A_sq)
+linalg.logm(A_sq)
+
+linalg.expm(A_non_sq)
+linalg.logm(A_non_sq)
+
+# Trigonometric functions - sinm, cosm, tanm
+linalg.sinm(A_sq)
+linalg.sinm(A_non_sq)
+
+# Hyperbolic trigonometric functions - sinhm, coshm, tanhm
+linalg.sinhm(A_sq)
+linalg.sinhm(A_non_sq)
+
+# Arbitrary function
+from scipy import special, random, linalg
+np.random.seed(1234)
+A = random.rand(3, 3)
+B = linalg.funm(A, lambda x: special.jv(0, x))
+A
+B
+linalg.eigvals(A)
+special.jv(0, linalg.eigvals(A))
+linalg.eigvals(B)
+
+
+
+# -----------------------------------------------------------------------------
+# SPARSE EIGENVALUE PROBLEMS WITH ARPACK
+# Can be used to find only smallest/largest/real/complex part eigenvalues
+
+from scipy.linalg import eig, eigh
+from scipy.sparse.linalg import eigs, eigsh
+
+np.set_printoptions(suppress = True)
+
+np.random.seed(0)
+
+X = np.random.rand(100, 100) - 0.5
+
+X = np.dot(X, X.T)
+
+evals_all, evecs_all = eigh(X) # too many eigen values
+
+evals_large, evecs_large = eigsh(X, 3, which = 'LM') # largest 3 eigenvalues
+
+print(evals_all[-3:])
+print(evals_large)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
