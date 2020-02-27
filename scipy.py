@@ -571,21 +571,35 @@ print(evals_large)
 
 
 
+# -----------------------------------------------------------------------------
+# SPATIAL DATA STRUCTURES AND ALGORITHMS
+
+# Delaunay triangulations
+from scipy.spatial import Delaunay
+points = np.array([[0, 0], [0, 1.1], [1,0], [1,1], [2, 1], [1, 2], [2, 2], [1, 1.5], [1, 1.3]])
+tri = Delaunay(points)
+
+plt.triplot(points[:,0], points[:,1], tri.simplices)
+plt.plot(points[:,0], points[:,1], 'o')
+for j, p in enumerate(points):
+    plt.text(p[0]-0.03, p[1]+0.03, j, ha='right') # label the points
+for j, s in enumerate(tri.simplices):
+    p = points[s].mean(axis=0)
+    plt.text(p[0], p[1], '#%d' % j, ha='center') # label triangles
+#plt.xlim(-0.5, 1.5); plt.ylim(-0.5, 1.5)
+plt.show()
 
 
+# Convex hulls
+from scipy.spatial import ConvexHull, convex_hull_plot_2d
+points = np.random.rand(30, 2)
+hull = ConvexHull(points)
+plt.plot(points[:, 0], points[:, 1], 'o')
+for simplex in hull.simplices:
+    plt.plot(points[simplex, 0], points[simplex, 1], 'k-')
+plt.show()
 
-
-
-
-
-
-
-
-
-
-
-
-
+convex_hull_plot_2d(hull)
 
 
 
