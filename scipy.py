@@ -603,9 +603,22 @@ convex_hull_plot_2d(hull)
 
 
 
+# -----------------------------------------------------------------------------
+# STATS
+from scipy import stats
+help(stats)
 
+from scipy.stats import norm # normal
+from __future__ import print_function
 
+print(stats.norm.__doc__)
 
+dir(norm)
+
+rv = norm()
+dir(rv)
+
+dist_continu = [d for d in dir(stats) if isinstance(getattr(stats, d), stats.rv_continuous)]
 
 
 
