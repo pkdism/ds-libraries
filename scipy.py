@@ -613,24 +613,33 @@ from __future__ import print_function
 
 print(stats.norm.__doc__)
 
+print('bounds lower %s, upper %s' %(norm.a, norm.b))
+
 dir(norm)
 
 rv = norm()
 dir(rv)
 
 dist_continu = [d for d in dir(stats) if isinstance(getattr(stats, d), stats.rv_continuous)]
+dist_discrete = [d for d in dir(stats) if isinstance(getattr(stats, d), stats.rv_discrete)]
 
 
 
+n = np.empty(1000)
 
+for i in range(1000):
+    n[i] = norm.rvs()
 
+plt.hist(n, bins = 50, density = 1)
+plt.hist(norm.pdf(n), bins = 50, density = 1)
+plt.hist(norm.cdf(n), bins = 50, density = 1)
+plt.hist(norm.moment(n.any()), bins = 50, density = 1)
+norm.mean()
+norm.var()
+norm.ppf(0.5) # median of 0-1 normal distribution
+norm.rvs(size = 3)
 
-
-
-
-
-
-
+norm.rvs(size = 3, random_state = 1234)
 
 
 
