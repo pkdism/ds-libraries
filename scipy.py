@@ -608,8 +608,11 @@ convex_hull_plot_2d(hull)
 from scipy import stats
 help(stats)
 
+
+# Random variables
+
 from scipy.stats import norm # normal
-from __future__ import print_function
+# from __future__ import print_function
 
 print(stats.norm.__doc__)
 
@@ -640,14 +643,28 @@ norm.ppf(0.5) # median of 0-1 normal distribution
 norm.rvs(size = 3)
 
 norm.rvs(size = 3, random_state = 1234)
+norm.rvs(3) # the first arguement is the loc (mean, in case of normal distrubution) parameter, not size
 
 
+# Shifting and scaling
+x = norm.rvs(size = 5, loc = 3, scale = 4)
+norm.stats(x)
+
+norm.stats(loc = 3, scale = 4, moments = "mv")
+
+np.mean(norm.rvs(5, size = 500))
 
 
+# Shape parameters
+from scipy.stats import gamma
+gamma.numargs
+gamma.shapes
+gamma(a = 1, scale = 2).stats(moments = "mv")
 
 
+# Freezing a distribution
+rv = gamma(1, scale = 2) # first parameter is shape (alpha or a)
+rv
+rv.mean(), rv.std()
 
-
-
-
-
+# continue after revising statistics
