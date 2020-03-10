@@ -253,38 +253,25 @@ plt.show()
 
 
 
+# IMAGES
+
+# only .png images are supported
+import matplotlib.image as mpimg
+
+# getting the image into a numpy array with 4 dimensions - red, green, blue, alpha (transperency)
+img = mpimg.imread('/Users/pawan1.dwivedi/Downloads/pics/minimalist/6005397-minimalist-wallpaper.png')
+print(img)
+img.shape
+img.dtype
+
+# plotting a numpy array
+imgplot = plt.imshow(img)
 
 
+# picking one channel of numpy
+lum_img = img[:, :, 0]
+plt.imshow(lum_img)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+plt.imshow(lum_img, cmap="hot")
 
 
