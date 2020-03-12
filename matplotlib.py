@@ -275,3 +275,62 @@ plt.imshow(lum_img)
 plt.imshow(lum_img, cmap="hot")
 
 
+imgplot = plt.imshow(lum_img)
+imgplot.set_cmap('nipy_spectral')
+
+
+# Adding a color bar (legend)
+imgplot = plt.imshow(lum_img)
+plt.colorbar()
+
+
+fig = plt.figure()
+a = fig.add_subplot(1, 2, 1)
+imgplot = plt.imshow(lum_img)
+a.set_title('Before')
+plt.colorbar(ticks=[0.1, 0.3, 0.5, 0.7], orientation='horizontal')
+a = fig.add_subplot(1, 2, 2)
+imgplot = plt.imshow(lum_img)
+imgplot.set_clim(0.0, 0.7)
+a.set_title('After')
+plt.colorbar(ticks=[0.1, 0.3, 0.5, 0.7], orientation='horizontal')
+
+
+# Array interpolation schemes
+from PIL import Image
+img = Image.open('/Users/pawan1.dwivedi/Downloads/pics/minimalist/6005397-minimalist-wallpaper.png')
+
+img.thumbnail((64, 64), Image.ANTIALIAS)
+imgplot = plt.imshow(img)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Histogram of image data
+plt.hist(lum_img.ravel(), bins = 256, range = (0.0, 1.0), fc = 'k', ec = 'k')
+
+
+imgplot = plt.imshow(lum_img, clim = (0.0, 0.7))
+
+
+
